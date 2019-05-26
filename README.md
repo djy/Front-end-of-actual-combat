@@ -1,5 +1,11 @@
 # 此项目是我的个人博客
 
+### 博客cdn加速地址
+
+```txt
+https://profos.xyz
+```
+
 ### 编写此博客的目的
 
 ```txt
@@ -14,6 +20,7 @@
 
 ```txt
 github访问博客慢，这是痛点。但是掏钱买域名和云主机更痛啊。
+最近我看到国外有个免费的dns解析服务提供商做了一下代理，访问这个地址 profos.xyz 速度应该快些
 ```
 
 ### 写博客想得到啥
@@ -25,7 +32,7 @@ github访问博客慢，这是痛点。但是掏钱买域名和云主机更痛�
 ### 博客访问地址
 
 ```txt
-https://qzruncode.github.io/blog
+gitpage默认的地址 https://qzruncode.github.io/blog
 ```
 
 ### 我的联系方式
