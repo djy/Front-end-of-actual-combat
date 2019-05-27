@@ -44,7 +44,7 @@
             "type": "image/png"
         }
     ],
-    "start_url": "https://profos.xyz/#/blog",
+    "start_url": "/#/blog",
     "display": "fullscreen",
     "theme_color": "#3fada8",
     "background_color": "#3fada8"
