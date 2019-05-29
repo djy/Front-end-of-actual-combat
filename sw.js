@@ -1,4 +1,4 @@
-const CACHE = "yejiawei-pwd-v5";
+const CACHE = "yejiawei-pwd-v6";
 const precacheFiles = [
     './img/aside.1aa37d3d.jpg',
     './img/author.6eb61820.jpg',
