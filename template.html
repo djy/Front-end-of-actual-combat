@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        ul{
+            position: relative;
+            top: 0;
+            left: 0;
+        }
+        .loading{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 140px;
+            background-color: white;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    
+    <template id="popup-info">
+        <style>
+            .wrapper {
+                position: relative;
+                top: 0;
+                left: 0;
+                overflow: hidden;
+            }
+
+            .info {
+                font-size: 12px;
+                width: 120px;
+                display: inline-block;
+                border: 1px solid #ccc;
+                padding: 10px;
+                background: white;
+                border-radius: 2px;
+                opacity: 0;
+                transition: 0.6s all;
+                position: absolute;
+                bottom: 20px;
+                left: 10px;
+            }
+
+            .geometry {
+                width: 20px;
+                height: 20px;
+                background-color: blueviolet;
+                cursor: pointer;
+            }
+
+            .choose {
+                background-color: green;
+            }
+
+            .geometry:hover + .info, .geometry:focus + .info {
+                opacity: 1;
+            }
+
+            .mystar{
+                clip-path: polygon(50% 0, 75% 25%, 100% 25%, 75% 60%, 100% 100%, 50% 75%, 0 100%, 25% 60%, 0 25%, 25% 25%, 50% 0);
+            }
+        </style>
+        <span class="wrapper">
+            <div class="geometry mystar"></div>
+            <span class="info">
+                <slot name="info">默认信息</slot>
+            </span>
+        </span>
+    </template>
+    <ul is="my-ul" name="my-ul">
+        <div class="loading">
+            <svg width="50" height="50" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <symbol id="circle">
+                        <circle cx="25" cy="4" r="4"/>
+                        <circle cx="46" cy="25" r="4"/>
+                        <circle cx="25" cy="46" r="4"/>
+                        <circle cx="4" cy="25" r="4"/>
+                    </symbol>
+                </defs>
+                <g>
+                    <use 
+                        xlink:href="#circle" 
+                        fill="green">
+                    </use>
+                    <use 
+                        xlink:href="#circle" 
+                        fill="green"
+                        style="transform-origin: 25px 25px; transform: rotate(45deg);">
+                    </use>
+                    <animateTransform 
+                        attributeName="transform"
+                        type="rotate"
+                        from="0 25 25"
+                        to="360 25 25"
+                        dur="3s"
+                        repeatCount="indefinite"
+                    />
+                </g>
+            </svg>
+        </div>
+        <li is="my-li" color="red" name="my-li">list 1</li>
+        <li is="my-li" color="pink" name="my-li">list 2</li>
+        <li is="my-li" color="darkgreen" name="my-li">list 3</li>
+        <li is="my-li" color="green" name="my-li">list 4</li>
+    </ul>
+</body>
+<script>
+
+class MyStar extends HTMLElement { // 创建自定义html元素
+    constructor() {
+        super();
+        const shadow = this.attachShadow({mode: 'open'}); // 创建元素的shadow容器，因为此容器只是个容器不做渲染所以叫shadow
+        const template = document.getElementById('popup-info').content; // 返回模板内容
+        shadow.appendChild(template.cloneNode(true));
+        shadow.querySelector(".geometry").addEventListener('click', function(e) {
+            shadow.querySelector(".geometry").classList.toggle("choose");
+        })
+        
+        // console.log(shadow.host); // 返回shadow容器放在哪个元素中
+
+        // 利用shadowRoot可以获取当前元素所处的shadow容器，进而可以操作其子节点
+        const slot = this.shadowRoot.querySelector('slot'); 
+        slot.addEventListener('slotchange', function(e) { // 当插槽插入内容时触发
+            const nodes = slot.assignedNodes({ // 获取Slot元素被替换后的元素，参数表示是否递归显示（可选）
+                flatten: true
+            });
+            console.log(`Slot元素 "${slot.name}" 被替换成 "${nodes[0].outerHTML}".`);
+
+            // document.querySelector('[slot="info"]').assignedSlot; 获取与此节点关联的slot插槽
+            // document.querySelector('[slot="info"]').slot; 获取此节点的slot属性值
+
+            // getRootNode方法获取的是当前节点所在的根节点
+            // shadow.querySelector('.wrapper').getRootNode(); 在shadow中用就是shadow，在document中用就是document
+        });
+    }
+}
+
+class MyUl extends HTMLUListElement { // 扩展原生的html元素
+    constructor() {
+        super();
+        const styles = {
+            'listStyle': 'none',
+            'padding': '20px',
+            'fontSize': '15px',
+            'fontFamily': 'fantasy',
+            'display': 'inline-block',
+            'width': '200px',
+            'border': '1px dashed #e6d4d4',
+            'maxHeight': '400px'
+        };
+        for(let key in styles) {
+            this.style[key] = styles[key];
+        }
+    }
+}
+
+class MyLi extends HTMLLIElement { // 扩展原生的html元素
+    constructor() {
+        super();
+        this.style.color = this.getAttribute('color');
+
+        const star = document.createElement("my-star");
+        star.style.float = "right";
+        const span = document.createElement('span');
+        span.setAttribute('slot', 'info');
+        span.textContent = '点击五角星选中此项';
+        star.append(span);
+        this.append(star);
+    }
+};
+
+setTimeout(() => {
+    customElements.define('my-star', MyStar);
+    customElements.define('my-ul', MyUl, { extends: 'ul' });
+    customElements.define('my-li', MyLi, { extends: 'li' });
+}, 3000)
+
+// customElements.get('my-star') // 获取定义标签的类
+
+async function init () {
+    const undefinedElements = Array.from(document.body.querySelectorAll(':not(:defined)')); // 获取页面上暂时还未定义的标签
+    // whenDefined 会返回一个promise，如果节点定义了立即resolve
+    const promises = undefinedElements.map(item => customElements.whenDefined(item.getAttribute('name'))); 
+    await Promise.all(promises);
+
+    const ul = document.querySelector('ul');
+    ul.removeChild(ul.querySelector('.loading'));
+}    
+init();
+</script>
+
+</html>

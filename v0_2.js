@@ -1,4 +1,4 @@
-const CACHE = "yejiawei-pwd-v0_1";
+const CACHE = "yejiawei-pwd-v0_2";
 const precacheFiles = [
     './img/aside.1aa37d3d.jpg',
     './img/author.6eb61820.jpg',
@@ -6,6 +6,7 @@ const precacheFiles = [
     './img/pagehead.b7e2612a.png',
     './img/road.18f1398d.png',
     './img/submenu.65f7930c.jpeg',
+    './template.html'
 ];
 
 self.addEventListener("install", function (event) {
