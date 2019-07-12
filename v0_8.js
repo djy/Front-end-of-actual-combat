@@ -7,7 +7,7 @@ const precacheFiles = [
     './img/road.18f1398d.png',
     './img/submenu.65f7930c.jpeg',
     './template.html',
-    
+
     './webgl/01ba6e02c5b5a0100a30414e2295319d.jpg',
     './webgl/082610eb1392266136fc2fd0e66ad686.glsl',
     './webgl/092573494f967c72f81f9824e6424f85.glsl',
