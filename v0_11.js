@@ -1,4 +1,4 @@
-const cacheVersion = 'v1'; 
+const cacheVersion = 'v2'; 
 
 const cacheList = [
     './img/aside.1aa37d3d.jpg',
