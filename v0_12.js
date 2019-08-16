@@ -1,4 +1,4 @@
-const cacheVersion = 'v1'; 
+const cacheVersion = 'v2'; 
 
 const cacheList = [
     './img/aside.1aa37d3d.jpg',
@@ -30,8 +30,6 @@ const updateCache = (request) => {
     })
 }
 
-
-
 // 缓存资源文件
 self.addEventListener('install', e => {
     e.waitUntil(
@@ -47,7 +45,6 @@ self.addEventListener('install', e => {
 self.addEventListener('fetch', e => {
     e.respondWith( // 用来拦截浏览器的默认fetch请求资源
         caches.match(e.request).then(response => {
-            console.log(e.request.url);
             if(response !== undefined) { 
                 return response;
             }else{
